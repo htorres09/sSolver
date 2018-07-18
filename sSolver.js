@@ -15,7 +15,7 @@ var arregloColumnas = [];
 
 $(document).ready(function(){
   console.log("Ready");
-  $('.solucion').prop('disabled', true);
+  //$('.solucion').prop('disabled', true);
   inicializar();
   obtenerArreglos();
   for (s=1; s<10; s++){
@@ -30,12 +30,13 @@ $('#buscar').keyup(function() {
     var valor = $(this).val();
     //Aquí limpiar todo el css de Highlight
     $('input').removeClass('highline');
+    $('input').removeClass('higherror');
     $('table').removeClass('highcube');
     for(i=1; i<10; i++){
         for(j=1; j<10; j++){
             var c = "#"+i+""+j;
             if($(c).val()==valor && $(c).val()!=''){
-                console.log(c+' '+valor);
+                //console.log(c+' '+valor);
                 iluminarCaja(i,j);
                 if(cubo1.includes(c)){
                     iluminarCuadro('#C1',1);
@@ -93,7 +94,7 @@ function inicializar(){
 function obtenerArreglos(){
   arregloFilas = [];
   arregloColumnas = [];
-  
+
   for(i=1; i<10; i++){
       var fila = [];
       for(j=1; j<10; j++){
@@ -136,7 +137,7 @@ function iluminarCaja(fila,columna) {
 }
 
 function iluminarCuadro(id, n){
-    console.log('Ilumina el cuadro que tiene el numero');
+    console.log('Iluminar cuadro');
     $(id).addClass('highcube');
 }
 
@@ -153,6 +154,20 @@ function congelar(){
 }
 
 function limpiar(){
+    for(i=1; i<10; i++){
+        for(j=1; j<10; j++){
+            var c = "#"+i+""+j;
+            if(!($(c).hasClass('highbox'))){
+                $(c).val('');
+            }
+            if(($(c).hasClass('higherror'))){
+                $(c).removeClass('higherror');
+            }
+        }
+    }
+}
+
+function borrar(){
     $('input').removeClass();
     $('table').removeClass('highcube');
     for(i=1; i<10; i++){
@@ -168,23 +183,99 @@ function discriminarRestantes(){
   obtenerArreglos();
   //Remover elementos de la solución que estan en los arreglos fila y columna
   for(n=0; n<9; n++){
-    console.log("Arreglo Filas: " + filSol[n].toString());
-    console.log("Arreglo Columnas: " + colSol[n].toString());
+    //console.log("Arreglo Filas: " + filSol[n].toString());
+    //console.log("Arreglo Columnas: " + colSol[n].toString());
     for(m=0; m<9; m++){
       if(filSol[n].includes(arregloFilas[n][m])){
-        console.log("Elemento a eliminar: " + arregloFilas[n][m]);
+        //console.log("Elemento a eliminar: " + arregloFilas[n][m]);
         filSol[n].splice($.inArray(arregloFilas[n][m],filSol[n]),1);
       }
       if(colSol[n].includes(arregloColumnas[n][m])){
-        console.log("Elemento a eliminar: " + arregloColumnas[n][m]);
+        //console.log("Elemento a eliminar: " + arregloColumnas[n][m]);
         colSol[n].splice($.inArray(arregloColumnas[n][m],colSol[n]),1);
       }
     }
-    console.log("Arreglo Filas: " + filSol[n].toString());
-    console.log("Arreglo Columnas: " + filSol[n].toString());
+    //console.log("Arreglo Filas: " + filSol[n].toString());
+    //console.log("Arreglo Columnas: " + filSol[n].toString());
     v = n+1;
     $("#sf"+v).val(filSol[n]);
     $("#sc"+v).val(colSol[n]);
   }
+}
 
+function verificar() {
+    verificarCuadro();
+    //verificarLineas();
+}
+
+function verificarCuadro() {
+    var cuadro1 = [];
+    var cuadro2 = [];
+    var cuadro3 = [];
+    var cuadro4 = [];
+    var cuadro5 = [];
+    var cuadro6 = [];
+    var cuadro7 = [];
+    var cuadro8 = [];
+    var cuadro9 = [];
+    var ids = [];
+    var valoresActuales = [];
+
+    // Obtener arreglos de los 9 cuadros
+    for(e=0; e<9; e++){
+        cuadro1.push($(cubo1[e]).val());
+        cuadro2.push($(cubo2[e]).val());
+        cuadro3.push($(cubo3[e]).val());
+        cuadro4.push($(cubo4[e]).val());
+        cuadro5.push($(cubo5[e]).val());
+        cuadro6.push($(cubo6[e]).val());
+        cuadro7.push($(cubo7[e]).val());
+        cuadro8.push($(cubo8[e]).val());
+        cuadro9.push($(cubo9[e]).val());
+    }
+
+    // Obtener los ids de las cajas repetidas
+    ids.push(comparar(cuadro1));
+    // Agrega clase a los ids
+    for(n in ids){
+        if(!($(ids[n]).hasClass('highbox'))){
+            $(ids[n]).addClass('higherror');
+        }
+    }
+}
+
+function comparar(arr){
+    var valoresActuales = [];
+    var indices = [];
+
+    for(i=0; i<arr.length; i++){
+        var valor = arr[i];
+        if(valor in valoresActuales){
+            indices.push(i);
+        } else {
+            valoresActuales.push(valor);
+        }
+    }
+    return indices;
+}
+
+function verificarLineas() {
+    var ids = [];
+    var id = '';
+    // Obtener arreglos de los 9 cuadros
+    obtenerArreglos();
+    for(n=0; n<9; n++){
+        for(m=0; m<9; m++){
+            if(arregloFilas[n][m] == n+1){
+
+            }
+        }
+    }
+
+    // Agrega clase a los ids
+    for(n in ids){
+        if(!($(ids[n]).hasClass('highbox'))){
+            $(ids[n]).addClass('higherror');
+        }
+    }
 }
