@@ -1,4 +1,4 @@
-var cubo = []
+﻿var cubo = []
 var fil = []
 var col = []
 var filSol = [];
@@ -207,7 +207,7 @@ function discriminarRestantes(){
 }
 
 function verificar() {
-    //verificarCuadro();
+    verificarCuadro();
     verificarLineas();
 }
 
@@ -256,12 +256,12 @@ function comparar(arrCubo, arrIds){
   var indices = [];
   for(i=0; i<arrCubo.length; i++){
     if(arrCubo[i]!=''){
-      for(j=0; j<arrCubo.length; j++){
-        if(arrCubo[j]!='' && arrCubo[i]!=''){
+      for(j=i+1; j<arrCubo.length; j++){
+        if(arrCubo[j]!=''&&i!=j){
           if(arrCubo[j]==arrCubo[i]){
-            if(!(indices.includes(arrIds[i]))){
-              indices.push(arrIds[i]);
-            }
+           // if(!(indices.includes(arrIds[i]))){
+           //   indices.push(arrIds[i]);
+           // }
             if(!(indices.includes(arrIds[j]))){
               indices.push(arrIds[j]);
             }
