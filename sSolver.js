@@ -188,6 +188,40 @@ function borrar(){
     }
 }
 
+function guardar(){
+  var id = '', val = 0;
+  var texto = '{ "sudoku" : [';
+  //leer la matriz y agregarla a texto
+  for(i=0; i<9; i++){
+    for(j=0; j<9; j++){
+      id = '#'+(i+1)+(j+1);
+      val = $(id).val();
+
+      texto += ' { "id": "' + id + '", "valor": "' + val +'"';
+      if($(id).hasClass('highbox')){
+        texto += ', "class":"highbox" },';
+      } else {
+         texto += ' },';
+      }
+    }
+  }
+  texto = texto.replace(/,\s*$/, "");
+  texto += ']}';
+
+  var obj = JSON.parse(texto);
+  exportJSON(obj, 'sudokuActual');
+}
+
+function exportJSON(objeto, nombre){
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(objeto));
+  var downloadAnchorNode = document.createElement('a');
+  downloadAnchorNode.setAttribute("href", dataStr);
+  downloadAnchorNode.setAttribute("download", nombre + '.json');
+  document.body.appendChild(downloadAnchorNode);
+  downloadAnchorNode.click();
+  downloadAnchorNode.remove();
+}
+
 function discriminarRestantes(){
   obtenerArreglos();
   //Remover elementos de la solución que estan en los arreglos fila y columna
