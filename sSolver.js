@@ -39,6 +39,38 @@ $('#buscar').keyup(function() {
     }
 });
 
+function verNumero(n){
+  var valor = n;
+  for(i=1; i<10; i++){
+      for(j=1; j<10; j++){
+          var c = "#"+i+""+j;
+          if($(c).val()==valor && $(c).val()!=''){
+              //console.log(c+' '+valor);
+              iluminarCaja(i,j);
+              for(n=0;n<9;n++){
+                if(cubo[n].includes(c)){
+                  iluminarCuadro('#C'+(n+1),(n+1))
+                }
+              }
+          }
+      }
+  }
+}
+
+function limpiarNumeros(){
+  for(i=1; i<10; i++){
+      for(j=1; j<10; j++){
+          var c = "#"+i+""+j;
+          if(($(c).hasClass('highline'))){
+              $(c).removeClass('highline');
+          }
+          if(($(c).hasClass('higherror'))){
+              $(c).removeClass('higherror');
+          }
+      }
+  }
+}
+
 $(':input').keyup(function() {
   inicializar();
   discriminarRestantes();
