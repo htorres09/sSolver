@@ -5,6 +5,7 @@ var filSol = [];
 var colSol = [];
 var arregloFilas = [];
 var arregloColumnas = [];
+var arregloComplemento = [];
 
 $(document).ready(function(){
   inicializar();
@@ -16,8 +17,7 @@ $(document).ready(function(){
 });
 
 $('#buscar').keyup(function() {
-    // j - Columna
-    // i - Fila
+    // j - Columna    // i - Fila
     var valor = $(this).val();
     //Aquí limpiar todo el css de Highlight
     $('input').removeClass('highline');
@@ -27,25 +27,24 @@ $('#buscar').keyup(function() {
         for(j=1; j<10; j++){
             var c = "#"+i+""+j;
             if($(c).val()==valor && $(c).val()!=''){
-                //console.log(c+' '+valor);
                 iluminarCaja(i,j);
                 for(n=0;n<9;n++){
                   if(cubo[n].includes(c)){
                     iluminarCuadro('#C'+(n+1),(n+1))
-                  }
-                }
-            }
-        }
-    }
-});
+}/*.if*/ }/*.for*/ }/*.if*/ }/*.for*/ }/*.for*/ });
 
-function verNumero(n){
-  var valor = n;
+$(':input').keyup(function() {
+  inicializar();
+  discriminarRestantes();
+  var valor = $(this).val();
+  //Aquí limpiar todo el css de Highlight
+  $('input').removeClass('highline');
+  $('input').removeClass('higherror');
+  $('table').removeClass('highcube');
   for(i=1; i<10; i++){
       for(j=1; j<10; j++){
           var c = "#"+i+""+j;
           if($(c).val()==valor && $(c).val()!=''){
-              //console.log(c+' '+valor);
               iluminarCaja(i,j);
               for(n=0;n<9;n++){
                 if(cubo[n].includes(c)){
@@ -55,25 +54,6 @@ function verNumero(n){
           }
       }
   }
-}
-
-function limpiarNumeros(){
-  for(i=1; i<10; i++){
-      for(j=1; j<10; j++){
-          var c = "#"+i+""+j;
-          if(($(c).hasClass('highline'))){
-              $(c).removeClass('highline');
-          }
-          if(($(c).hasClass('higherror'))){
-              $(c).removeClass('higherror');
-          }
-      }
-  }
-}
-
-$(':input').keyup(function() {
-  inicializar();
-  discriminarRestantes();
 });
 
 function inicializar(){
@@ -132,6 +112,37 @@ function inicializar(){
 
 }
 
+function verNumero(n){
+  var valor = n;
+  for(i=1; i<10; i++){
+      for(j=1; j<10; j++){
+          var c = "#"+i+""+j;
+          if($(c).val()==valor && $(c).val()!=''){
+              iluminarCaja(i,j);
+              for(n=0;n<9;n++){
+                if(cubo[n].includes(c)){
+                  iluminarCuadro('#C'+(n+1),(n+1))
+                }
+              }
+          }
+      }
+  }
+}
+
+function limpiarNumeros(){
+  for(i=1; i<10; i++){
+      for(j=1; j<10; j++){
+          var c = "#"+i+""+j;
+          if(($(c).hasClass('highline'))){
+              $(c).removeClass('highline');
+          }
+          if(($(c).hasClass('higherror'))){
+              $(c).removeClass('higherror');
+          }
+      }
+  }
+}
+
 function obtenerArreglos(){
   arregloFilas = [];
   arregloColumnas = [];
@@ -162,8 +173,20 @@ function obtenerArreglos(){
 
 }
 
+function obtenerArreglosComplementarios(){
+  for(i=0; i<9; i++){
+    var cuadro = [];
+    for(e in cubo[i]){
+      if(parseInt($(cubo[i][e]).val())){
+        cuadro.push(parseInt($(cubo[i][e]).val()));
+      }
+    }
+    arregloComplemento.push(cuadro);
+  }
+}
+
 function iluminarCaja(fila,columna) {
-    console.log('Highlight: \n>Fila:' + fila +'\n>Col: ' + columna );
+    //console.log('Highlight: \n>Fila:' + fila +'\n>Col: ' + columna );
     var clase = '';
     //fila
     for(n=1; n<10; n++){
@@ -178,7 +201,7 @@ function iluminarCaja(fila,columna) {
 }
 
 function iluminarCuadro(id, n){
-    console.log('Iluminar cuadro');
+    //console.log('Iluminar cuadro');
     $(id).addClass('highcube');
 }
 
@@ -228,7 +251,6 @@ function guardar(){
     for(j=0; j<9; j++){
       id = '#'+(i+1)+(j+1);
       val = $(id).val();
-
       texto += ' { "id": "' + id + '", "valor": "' + val +'"';
       if($(id).hasClass('highbox')){
         texto += ', "class":"highbox" },';
@@ -253,6 +275,19 @@ function exportJSON(objeto, nombre){
   downloadAnchorNode.click();
   downloadAnchorNode.remove();
 }
+
+function contarBlancos(){
+  var cuenta = 0;
+  for(i=1; i<=9; i++){
+    for(j=1; j<=9; j++){
+      if($('#'+i+j).val()==''){
+        cuenta++;
+      }
+    }
+  }
+  console.log(cuenta);
+}
+
 
 function discriminarRestantes(){
   obtenerArreglos();
@@ -325,9 +360,6 @@ function comparar(arrCubo, arrIds){
       for(j=i+1; j<arrCubo.length; j++){
         if(arrCubo[j]!=''&&i!=j){
           if(arrCubo[j]==arrCubo[i]){
-           // if(!(indices.includes(arrIds[i]))){
-           //   indices.push(arrIds[i]);
-           // }
             if(!(indices.includes(arrIds[j]))){
               indices.push(arrIds[j]);
             }
@@ -343,6 +375,5 @@ function agregarClase(ids, clase){
   for(n in ids){
       if(!($(ids[n]).hasClass('highbox'))){
           $(ids[n]).addClass(clase);
-      }
-  }
-}
+      }/*.for*/ }/*.for*/
+}/*.agregarClase*/
